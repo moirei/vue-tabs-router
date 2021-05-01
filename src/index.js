@@ -48,12 +48,18 @@ const install = function(Vue, options) {
         },
 
         newTab(value = null) {
+          value = value || {};
           const { to, ...opts } = {
             ...options.newTabDefaults,
-            ...(value || {}),
+            ...value,
           };
           const tab = {
             ...opts,
+            label: value.label
+              ? value.label
+              : to
+              ? getRouteName(to, options.newTabDefaults.label)
+              : options.newTabDefaults.label,
             key: typeof to === "object" ? to.name : Date.now(),
             route: to || { name: "index" },
             navigation: true,
@@ -90,9 +96,10 @@ const install = function(Vue, options) {
           } else {
             const to = value.to ? value.to : value;
             const { route } = instance.$router.resolve(to);
-            tab.label = value.label ?? getRouteName(route);
-            const { name, params, query } = route;
-            tab.route = { name, params, query };
+            tab.label =
+              value.label ?? getRouteName(route, options.newTabDefaults.label);
+            const { name, params, query, path } = route;
+            tab.route = { name, params, query, path };
             tab.key = route.name;
           }
           tab.navigation = !!value.navigation;

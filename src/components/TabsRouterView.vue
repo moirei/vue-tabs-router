@@ -101,9 +101,9 @@ export default {
       return tab?.label ?? "New Tab";
     },
     newNavigation(route) {
-      const { name, params, query } = route;
+      const { name, params, query, path } = route;
       this.$tabs.newTab({
-        to: { name, params, query },
+        to: { name, params, query, path },
         navigation: true,
       });
     },
@@ -134,10 +134,10 @@ export default {
       }
 
       if (this.activeTabDetails.navigation) {
-        const { name, params, query } = to;
+        const { name, params, query, path } = to;
         this.$tabs.updateTab(this.activeTabDetails, {
-          route: { name, params, query },
-          label: getRouteName(to),
+          route: { name, params, query, path },
+          label: getRouteName(to, this.$tabs.options.newTabDefaults.label),
         });
       } else {
         this.newNavigation(to);
