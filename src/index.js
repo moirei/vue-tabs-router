@@ -62,6 +62,8 @@ const install = function(Vue, options) {
           this.hooks.willAddTab(tab);
 
           instance.$store.dispatch("tabs/addTab", tab);
+
+          return tab;
         },
 
         updateTab(tab, data) {
@@ -73,6 +75,10 @@ const install = function(Vue, options) {
 
         removeTab(tab) {
           instance.$store.dispatch("tabs/removeTab", tab);
+        },
+
+        getTabs() {
+          return instance.$store.getters["tabs/tabs"];
         },
 
         to(value) {

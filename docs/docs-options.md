@@ -4,13 +4,14 @@
 
 ## Tab Options
 
-| Attribute    | Description                                                  | Default   |
-| ------------ | ------------------------------------------------------------ | --------- |
-| `label`      | The tab label                                                | `New Tab` |
-| `navigation` | If set to the `true`, and the tab is selected, changing the app route will update the tab | `false`   |
-| `favicon`    | Displayed next to the tab                                    |           |
+| Properties   | Description                                                  | Default             |
+| ------------ | ------------------------------------------------------------ | ------------------- |
+| `label`      | The tab label                                                | `New Tab`           |
+| `to`         | The router-link the tab points to.                           | `{ name: 'index' }` |
+| `navigation` | If set to the `true`, and the tab is selected, changing the app route will update the tab | `false`             |
+| `favicon`    | Displayed next to the tab                                    |                     |
 
-Additional fields may be added for custom behaviour.
+Additional properties may be added for custom behaviour.
 
 
 
@@ -66,6 +67,25 @@ export default ({ app }) => {
     },
   })
 }
+```
 
+
+
+Add a tab with icon
+
+```html
+<template>
+...
+  <v-btn
+   v-tabs-route="{
+     label: 'Settings',
+     to: { name: 'settings' },
+     icon: 'settings'
+   }"
+  >
+    Settings
+  </v-btn> 
+...
+</template>
 ```
 

@@ -7,6 +7,12 @@ This packages takes it a bit to the next level by providing a router component f
 
 
 
+## :green_heart: Features
+* Persistent tabs
+* Custom router-view for rendering pages within tabs
+* Configurable tab icons (favicon)
+
+
 ## Installation
 
 ```bash
@@ -61,8 +67,9 @@ import VueTabsRouter from '@moirei/vue-tabs-router'
 export default ({ app }) => {
   Vue.use(VueTabsRouter, { store: app.store })
 }
-
 ```
+
+See [extended example configuration for Nuxt](docs/docs-options.md#configuration-example).
 
 ## Usage
 
@@ -93,6 +100,9 @@ this.$tabs.to({
 
 See [all tab options](docs/docs-options.md#tab-options).
 
+### Plugin API
+See [all the package's API](docs/api.md).
+
 ## Dependencies
 
 * [vue-router](https://github.com/vuejs/vue-router): You'll need **vue-router** installed and configured.
@@ -102,7 +112,7 @@ See [all tab options](docs/docs-options.md#tab-options).
 
 ## Caveats
 
-* Tabs do not render server-side
+* Not tested for server-side rendering
 
 ## Credits
 

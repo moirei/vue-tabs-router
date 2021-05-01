@@ -24,103 +24,103 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { getRouteName, isSameRoute } from "./../helpers";
-import TabsView from "./view";
-import VueTabsChrome from "vue-tabs-chrome";
+import { mapGetters } from 'vuex'
+import { getRouteName, isSameRoute } from './helpers'
+import TabsView from './view'
+const VueTabsChrome = () => import('vue-tabs-chrome')
 
 export default {
-  name: "TabsRouterView",
+  name: 'TabsRouterView',
   components: { VueTabsChrome, TabsView },
   props: {
     dark: { type: Boolean, default: false },
-    container: { type: String, default: "div" },
+    container: { type: String, default: 'div' },
   },
   data() {
     return {
       tabs: [],
-    };
+    }
   },
   mounted() {
-    this.storeTabs.forEach((tab) => this.addStateTab(tab));
+    this.storeTabs.forEach((tab) => this.addStateTab(tab))
   },
   computed: {
     ...mapGetters({
-      storeTabs: "tabs/tabs",
-      activeTabDetails: "tabs/activeTabDetails",
+      storeTabs: 'tabs/tabs',
+      activeTabDetails: 'tabs/activeTabDetails',
     }),
     tab: {
       set(value) {
-        this.$store.dispatch("tabs/setTab", value);
+        this.$store.dispatch('tabs/setTab', value)
       },
       get() {
-        return this.$store.getters["tabs/tab"];
+        return this.$store.getters['tabs/tab']
       },
     },
   },
   methods: {
     addTab() {
-      this.$tabs.newTab({ navigation: true });
+      this.$tabs.newTab({ navigation: true })
     },
     checkCurrentRoute() {
       // if current route is not the active tab, add tab
-      const { route } = this.activeTabDetails;
+      const { route } = this.activeTabDetails
       if (
         route &&
         !isSameRoute(this.$router.resolve(route).resolved, this.$route)
       ) {
-        this.newNavigation(this.$route);
+        this.newNavigation(this.$route)
       }
     },
     addStateTab(tab) {
-      const newTab = { ...tab };
-      this.$tabs.hooks.willRenderTab(newTab);
+      const newTab = { ...tab }
+      this.$tabs.hooks.willRenderTab(newTab)
       // const newTab = this.$tabs.hooks.willRenderTab({ ...tab })
-      const exists = this.tabs.find((t) => t.key === newTab.key);
-      if (!exists) this.tabs.push(newTab);
+      const exists = this.tabs.find((t) => t.key === newTab.key)
+      if (!exists) this.tabs.push(newTab)
     },
     removeTab(tab) {
-      this.$tabs.removeTab(tab);
+      this.$tabs.removeTab(tab)
     },
     updateFromStore() {
-      const tabs = [];
-      const currentTabs = this.$refs.tabs.getTabs();
+      const tabs = []
+      const currentTabs = this.$refs.tabs.getTabs()
       this.storeTabs.forEach((tab) => {
-        const newTab = { ...tab };
-        this.$tabs.hooks.willRenderTab(newTab);
+        const newTab = { ...tab }
+        this.$tabs.hooks.willRenderTab(newTab)
         // const newTab = this.$tabs.hooks.willRenderTab({ ...tab })
-        const exists = currentTabs.find((t) => t.key === newTab.key);
-        if (!exists) tabs.push(newTab);
-      });
+        const exists = currentTabs.find((t) => t.key === newTab.key)
+        if (!exists) tabs.push(newTab)
+      })
 
-      this.$refs.tabs.addTab(...tabs);
+      this.$refs.tabs.addTab(...tabs)
     },
     renderLabel(tab) {
       // get latest changes
-      tab = this.storeTabs.find((t) => t.key == tab.key);
-      return tab?.label ?? "New Tab";
+      tab = this.storeTabs.find((t) => t.key == tab.key)
+      return tab?.label ?? 'New Tab'
     },
     newNavigation(route) {
-      const { name, params, query } = route;
+      const { name, params, query } = route
       this.$tabs.newTab({
         to: { name, params, query },
         navigation: true,
-      });
+      })
     },
   },
   watch: {
     storeTabs: {
       deep: true,
-      handler: "updateFromStore",
+      handler: 'updateFromStore',
     },
-    tab: async function() {
-      const { route } = this.activeTabDetails;
+    tab: async function () {
+      const { route } = this.activeTabDetails
       if (
         route &&
         !isSameRoute(this.$router.resolve(route).resolved, this.$route)
       ) {
         try {
-          await this.$router.replace(route);
+          await this.$router.replace(route)
         } catch (error) {
           // mostly trying to route twice
         }
@@ -128,23 +128,22 @@ export default {
     },
     $route(to) {
       if (this.activeTabDetails.route) {
-        const route = this.$router.resolve(this.activeTabDetails.route)
-          .resolved;
-        if (isSameRoute(route, to)) return;
+        const route = this.$router.resolve(this.activeTabDetails.route).resolved
+        if (isSameRoute(route, to)) return
       }
 
       if (this.activeTabDetails.navigation) {
-        const { name, params, query } = to;
+        const { name, params, query } = to
         this.$tabs.updateTab(this.activeTabDetails, {
           route: { name, params, query },
           label: getRouteName(to),
-        });
+        })
       } else {
-        this.newNavigation(to);
+        this.newNavigation(to)
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

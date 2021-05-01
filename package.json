@@ -1,6 +1,6 @@
 {
   "name": "@moirei/vue-tabs-router",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Vue2 router implementation for vue-tabs-chrome.",
   "private": false,
   "main": "./dist/vueTabsRouter.umd.min.js",
