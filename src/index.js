@@ -1,6 +1,6 @@
 import TabsRouterView from "./components/TabsRouterView";
 import directive from "./directive";
-import { getRouteName, warn } from "./helpers";
+import { getRouteName, pick, warn } from "./helpers";
 import * as module from "./store.module";
 
 const install = function(Vue, options) {
@@ -20,19 +20,14 @@ const install = function(Vue, options) {
 
   if (!options.directive) options.directive = "tabs-route";
 
-  // Ne Tab defaults
+  // New Tab defaults
   if (!options.newTabDefaults)
     options.newTabDefaults = {
       label: "New Tab",
       navigation: false,
     };
 
-  // register components
-  const components = { TabsRouterView };
-  Object.keys(components).forEach((name) => {
-    Vue.component(name, components[name]);
-  });
-
+  Vue.component("TabsRouterView", TabsRouterView);
   Vue.directive(options.directive, directive);
 
   Object.defineProperty(Vue.prototype, "$tabs", {
@@ -98,8 +93,7 @@ const install = function(Vue, options) {
             const { route } = instance.$router.resolve(to);
             tab.label =
               value.label ?? getRouteName(route, options.newTabDefaults.label);
-            const { name, params, query, path } = route;
-            tab.route = { name, params, query, path };
+            tab.route = pick(route, ["name", "params", "query", "path"]);
             tab.key = route.name;
           }
           tab.navigation = !!value.navigation;

@@ -25,7 +25,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getRouteName, isSameRoute } from "./../helpers";
+import { getRouteName, isSameRoute, pick } from "./../helpers";
 import TabsView from "./view";
 import VueTabsChrome from "vue-tabs-chrome";
 
@@ -101,9 +101,8 @@ export default {
       return tab?.label ?? "New Tab";
     },
     newNavigation(route) {
-      const { name, params, query, path } = route;
       this.$tabs.newTab({
-        to: { name, params, query, path },
+        to: pick(route, ["name", "params", "query", "path"]),
         navigation: true,
       });
     },
@@ -134,9 +133,8 @@ export default {
       }
 
       if (this.activeTabDetails.navigation) {
-        const { name, params, query, path } = to;
         this.$tabs.updateTab(this.activeTabDetails, {
-          route: { name, params, query, path },
+          route: pick(to, ["name", "params", "query", "path"]),
           label: getRouteName(to, this.$tabs.options.newTabDefaults.label),
         });
       } else {

@@ -1,3 +1,8 @@
+export function pick(data, fields) {
+  data = data || {};
+  return fields.reduce((a, f) => ((a[f] = data[f]), a), {});
+}
+
 export function startCase(str) {
   return str.replace(/\w\S*/g, function(txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -19,7 +24,7 @@ export function getRouteName(route, default_name = "") {
       .join(" — ");
   }
 
-  const route_name = (route.name || default_name)
+  const route_name = (route.name || default_name || "")
     .split("-")
     .map(startCase)
     .join(" — ");
